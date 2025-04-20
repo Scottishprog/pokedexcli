@@ -1,9 +1,18 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 func cleanInput(text string) []string {
-	var result []string
+	result := make([]string, 0)
+	splitSlice := strings.Fields(text)
+	for _, word := range splitSlice {
+		result = append(result, strings.ToLower(word))
+	}
+	//result = append(result, strings.Split(text, " "))
+
 	return result
 }
 
