@@ -26,3 +26,6 @@ go.work.sum
 
 #Jetbrains project Files
 .idea
+
+#Log Files
+*.log
