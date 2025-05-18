@@ -7,20 +7,6 @@ import (
 	"strings"
 )
 
-type cliCommand struct {
-	name        string
-	description string
-	callback    func() error
-}
-
-var commandList = map[string]cliCommand{
-	"exit": {
-		name:        "exit",
-		description: "Exit the Pokedex",
-		callback:    commandExit,
-	},
-}
-
 func startRepl() {
 	userInput := bufio.NewScanner(os.Stdin)
 	for {
@@ -33,7 +19,7 @@ func startRepl() {
 		}
 
 		command := userText[0]
-		functionName, ok := commandList[command]
+		functionName, ok := getCommands()[command]
 		if !ok {
 			fmt.Printf("Unknown command: %s\n", command)
 		} else {
@@ -51,8 +37,23 @@ func cleanInput(text string) []string {
 	return words
 }
 
-func commandExit() error {
-	fmt.Printf("Closing the Pokedex... Goodbye!")
-	os.Exit(0)
-	return nil
+type cliCommand struct {
+	name        string
+	description string
+	callback    func() error
+}
+
+func getCommands() map[string]cliCommand {
+	return map[string]cliCommand{
+		"exit": {
+			name:        "exit",
+			description: "Exit the Pokedex",
+			callback:    commandExit,
+		},
+		"help": {
+			name:        "help",
+			description: "Displays a help message",
+			callback:    commandHelp,
+		},
+	}
 }
