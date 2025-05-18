@@ -55,5 +55,18 @@ func getCommands() map[string]cliCommand {
 			description: "Displays a help message",
 			callback:    commandHelp,
 		},
+
+		"map": {
+			name:        "map",
+			description: "Displays the next 20 areas",
+			callback:    commandMap,
+		},
 	}
 }
+
+type config struct {
+	next     string
+	previous string
+}
+
+var urls config
