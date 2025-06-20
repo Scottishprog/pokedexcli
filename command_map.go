@@ -8,15 +8,15 @@ import (
 	"net/http"
 )
 
-func commandMap() error {
+func commandMap(Config config) (config, error) {
 	// get map information from:
 
 	// get this code working - produces a named struct that can be stepped through to print out all the map
-	// locations.
-	// once this is done, pull all API related code to an internal package, this func will
-	// only deal with requesting the struct, and display.
-	// An additional headache is to to get the Next/Previous struct parameters working with the
-	// function callback - AFTER getting the GET code/formatting working!
+	// locations. - DONE
+	// Pull all API related code to an internal package, this func will
+	// only deal with requesting the struct, and display. - WIP
+	// Get the Next/Previous struct parameters working with the
+	// function callback.
 
 	res, err := http.Get("https://pokeapi.co/api/v2/location-area/")
 	if err != nil {
@@ -50,8 +50,9 @@ func commandMap() error {
 	for _, result := range mapdata.Results {
 		fmt.Println(result.Name)
 	}
-
+	Config.next = mapdata.Next
+	Config.previous = mapdata.Previous
 	//fmt.Println(mapdata)
-	return nil
+	return Config, nil
 
 }
