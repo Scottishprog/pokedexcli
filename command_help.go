@@ -7,6 +7,8 @@ func commandHelp(Config config) (config, error) {
 	for commandName, command := range getCommands() {
 		fmt.Printf("%s: %s\n", commandName, command.description)
 	}
-	
+
+	fmt.Println("Next: ", Config.next, "\nPrevious: ", Config.previous)
+
 	return Config, nil
 }
