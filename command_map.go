@@ -16,14 +16,26 @@ func commandMap(Config *config) error {
 	// Pull all API related code to an internal package, this func will
 	// only deal with requesting the struct, and display. - WIP
 	// Get the Next/Previous struct parameters working with the
-	// function callback.
+	// function callback. - DONE
 
-	res, err := http.Get("https://pokeapi.co/api/v2/location-area/")
+	var address string
+	if Config.next == "" {
+		address = "https://pokeapi.co/api/v2/location-area/"
+	} else {
+		address = Config.next
+	}
+
+	//res, err := http.Get("https://pokeapi.co/api/v2/location-area/")
+	res, err := http.Get(address)
 	if err != nil {
 		log.Fatal(err)
 	}
 	body, err := io.ReadAll(res.Body)
-	res.Body.Close()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = res.Body.Close()
 	if res.StatusCode > 299 {
 		log.Fatalf("Response failed with status code: %d and\nbody: %s\n", res.StatusCode, body)
 	}
