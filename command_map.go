@@ -8,7 +8,7 @@ import (
 	"net/http"
 )
 
-func commandMap(Config config) (config, error) {
+func commandMap(Config *config) error {
 	// get map information from:
 
 	// get this code working - produces a named struct that can be stepped through to print out all the map
@@ -46,13 +46,15 @@ func commandMap(Config config) (config, error) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println("Next: ", mapdata.Next, "\nPrevious: ", mapdata.Previous)
+	Config.next = mapdata.Next
+	Config.previous = mapdata.Previous
+
+	fmt.Println("Next: ", Config.next, "\nPrevious: ", Config.previous)
 	for _, result := range mapdata.Results {
 		fmt.Println(result.Name)
 	}
-	Config.next = mapdata.Next
-	Config.previous = mapdata.Previous
+
 	//fmt.Println(mapdata)
-	return Config, nil
+	return nil
 
 }

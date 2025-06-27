@@ -24,8 +24,7 @@ func startRepl() {
 		if !ok {
 			fmt.Printf("Unknown command: %s\n", command)
 		} else {
-			var err error
-			Conf, err = functionName.callback(Conf)
+			err := functionName.callback(&Conf)
 			if err != nil {
 				return
 			}
@@ -42,7 +41,7 @@ func cleanInput(text string) []string {
 type cliCommand struct {
 	name        string
 	description string
-	callback    func(config) (config, error)
+	callback    func(*config) error
 }
 
 func getCommands() map[string]cliCommand {

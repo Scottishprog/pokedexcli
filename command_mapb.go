@@ -1,8 +1,6 @@
 package main
 
-import ()
+func commandMapb(Config *config) error {
 
-func commandMapb(Config config) (config, error) {
-
-	return Config, nil
+	return nil
 }
