@@ -25,7 +25,7 @@ func commandMap(Config *config) error {
 		address = Config.next
 	}
 
-	//res, err := http.Get("https://pokeapi.co/api/v2/location-area/")
+	mapdata := LocationAreaList(address)
 	res, err := http.Get(address)
 	if err != nil {
 		log.Fatal(err)
