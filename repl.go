@@ -3,13 +3,20 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"github.com/Scottishprog/pokedexcli/internal/pokeapi"
 	"os"
 	"strings"
 )
 
-func startRepl() {
+type config struct {
+	pokeapiClient pokeapi.Client
+	next          *string
+	previous      *string
+}
+
+func startRepl(cfg *config) {
 	userInput := bufio.NewScanner(os.Stdin)
-	var Conf config
+
 	for {
 		fmt.Print("Pokedex > ")
 		userInput.Scan()
@@ -24,7 +31,7 @@ func startRepl() {
 		if !ok {
 			fmt.Printf("Unknown command: %s\n", command)
 		} else {
-			err := functionName.callback(&Conf)
+			err := functionName.callback(cfg)
 			if err != nil {
 				return
 			}
@@ -68,11 +75,6 @@ func getCommands() map[string]cliCommand {
 			callback:    commandMapb,
 		},
 	}
-}
-
-type config struct {
-	next     string
-	previous string
 }
 
 type MapData struct {
