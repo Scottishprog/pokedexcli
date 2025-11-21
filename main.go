@@ -1,8 +1,10 @@
 package main
 
 import (
-	"github.com/Scottishprog/pokedexcli/internal/pokeapi"
 	"time"
+
+	"github.com/Scottishprog/pokedexcli/internal/pokeapi"
+	"github.com/Scottishprog/pokedexcli/internal/pokecache"
 )
 
 func main() {
@@ -11,5 +13,6 @@ func main() {
 		pokeapiClient: pokeClient,
 	}
 
+	cache := pokecache.NewCache(5 * time.Second)
 	startRepl(Config)
 }
