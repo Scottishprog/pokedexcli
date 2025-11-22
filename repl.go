@@ -3,9 +3,10 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"github.com/Scottishprog/pokedexcli/internal/pokeapi"
 	"os"
 	"strings"
+
+	"github.com/Scottishprog/pokedexcli/internal/pokeapi"
 )
 
 type config struct {

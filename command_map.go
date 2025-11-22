@@ -12,7 +12,7 @@ func commandMap(cfg *config) error {
 
 	cfg.next = shallowmapdata.Next
 	cfg.previous = shallowmapdata.Previous
-	
+
 	for _, result := range shallowmapdata.Results {
 		fmt.Println(result.Name)
 	}

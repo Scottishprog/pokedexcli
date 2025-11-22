@@ -5,27 +5,14 @@ import (
 	"time"
 )
 
-// cacheEntry
-type cacheEntry struct {
-	createdAt time.Time
-	value     []byte
-}
-
-type Cache struct {
-	interval   time.Duration
-	cacheEntry map[string]cacheEntry
-	mutex      sync.RWMutex
-}
-
 // NewCache()
-func NewCache(time time.Duration) *Cache {
+func NewCache(interval time.Duration) Cache {
 	var c = Cache{
-		interval:   time,
 		cacheEntry: make(map[string]cacheEntry),
-		mutex:      sync.RWMutex{},
+		mutex:      &sync.RWMutex{},
 	}
-	c.reapLoop()
-	return &c
+	go c.reapLoop(interval)
+	return c
 }
 
 // cache.Add()
@@ -44,19 +31,18 @@ func (c *Cache) Get(key string) ([]byte, bool) {
 }
 
 // cache.reapLoop()
-func (c *Cache) reapLoop() {
-	ticker := time.NewTicker(c.interval)
+func (c *Cache) reapLoop(interval time.Duration) {
+	ticker := time.NewTicker(interval)
 	defer ticker.Stop()
-	go func() {
-		for ; ; <-ticker.C {
-			c.mutex.Lock()
-			for key, entry := range c.cacheEntry {
-				if time.Now().After(entry.createdAt) {
-					delete(c.cacheEntry, key)
-				}
+
+	for ; ; <-ticker.C {
+		c.mutex.Lock()
+		for key, entry := range c.cacheEntry {
+			if time.Now().After(entry.createdAt) {
+				delete(c.cacheEntry, key)
 			}
-			c.mutex.Unlock()
 		}
-	}()
+		c.mutex.Unlock()
+	}
 
 }

@@ -12,12 +12,25 @@ func (c *Client) LocationList(pageURL *string) (ShallowMapData, error) {
 		url = *pageURL
 	}
 
+	var resp *http.Response
+	var err error
+
+	//if cache hit, return data directly
+	if bytestream, hit := c.cache.Get(url); hit {
+		mapdata := ShallowMapData{}
+		err := json.Unmarshal(bytestream, &mapdata)
+		if err != nil {
+			return ShallowMapData{}, err
+		}
+		return mapdata, nil
+	}
+
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return ShallowMapData{}, err
 	}
 
-	resp, err := c.httpClient.Do(req)
+	resp, err = c.httpClient.Do(req)
 	if err != nil {
 		return ShallowMapData{}, err
 	}
@@ -35,5 +48,6 @@ func (c *Client) LocationList(pageURL *string) (ShallowMapData, error) {
 		return ShallowMapData{}, err
 	}
 
+	c.cache.Add(url, dat)
 	return mapData, nil
 }
