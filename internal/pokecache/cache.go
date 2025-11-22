@@ -17,13 +17,15 @@ type Cache struct {
 	mutex      sync.RWMutex
 }
 
-// NewCache
+// NewCache()
 func NewCache(time time.Duration) *Cache {
-	return &Cache{
+	var c = Cache{
 		interval:   time,
 		cacheEntry: make(map[string]cacheEntry),
 		mutex:      sync.RWMutex{},
 	}
+	c.reapLoop()
+	return &c
 }
 
 // cache.Add()
@@ -33,6 +35,7 @@ func (c *Cache) Add(key string, val []byte) {
 	c.cacheEntry[key] = cacheEntry{time.Now(), val}
 }
 
+// cache.Get()
 func (c *Cache) Get(key string) ([]byte, bool) {
 	c.mutex.RLock()
 	defer c.mutex.RUnlock()
@@ -40,14 +43,20 @@ func (c *Cache) Get(key string) ([]byte, bool) {
 	return entry.value, ok
 }
 
+// cache.reapLoop()
 func (c *Cache) reapLoop() {
-	ticker := time.NewTicker(1 * time.Second)
-	c.mutex.Lock()
-	for range ticker.C {
-		for key, entry := range c.cacheEntry {
-			if time.Now().After(entry.createdAt.Add(c.interval)) {
-				delete(c.cacheEntry, key)
+	ticker := time.NewTicker(c.interval)
+	defer ticker.Stop()
+	go func() {
+		for ; ; <-ticker.C {
+			c.mutex.Lock()
+			for key, entry := range c.cacheEntry {
+				if time.Now().After(entry.createdAt) {
+					delete(c.cacheEntry, key)
+				}
 			}
+			c.mutex.Unlock()
 		}
-	}
+	}()
+
 }
