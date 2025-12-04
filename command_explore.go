@@ -4,8 +4,8 @@ import (
 	"fmt"
 )
 
-func commandExplore(cfg *config, location string) error {
-	deepmapdata, err := cfg.pokeapiClient.LocationExplore(location)
+func commandExplore(cfg *config, location *string) error {
+	deepmapdata, err := cfg.pokeapiClient.LocationExplore(*location)
 	if err != nil {
 		return err
 	}

@@ -27,12 +27,18 @@ func startRepl(cfg *config) {
 			continue
 		}
 
+		// if no second word from input, append a blank string.
+		if len(userText) == 1 {
+			userText = append(userText, "")
+		}
+
 		command := userText[0]
+		variable := userText[1]
 		functionName, ok := getCommands()[command]
 		if !ok {
 			fmt.Printf("Unknown command: %s\n", command)
 		} else {
-			err := functionName.callback(cfg)
+			err := functionName.callback(cfg, &variable)
 			if err != nil {
 				return
 			}
@@ -49,7 +55,7 @@ func cleanInput(text string) []string {
 type cliCommand struct {
 	name        string
 	description string
-	callback    func(*config) error
+	callback    func(*config, *string) error
 }
 
 func getCommands() map[string]cliCommand {
@@ -75,11 +81,11 @@ func getCommands() map[string]cliCommand {
 			description: "Displays the previous 20 areas",
 			callback:    commandMapb,
 		},
-		//"explore": {
-		//	name:        "explore",
-		//	description: "Displays a list of pokemon for the provided area",
-		//	callback:    commandExplore,
-		//},
+		"explore": {
+			name:        "explore",
+			description: "Displays a list of pokemon for the provided area",
+			callback:    commandExplore,
+		},
 	}
 }
 
