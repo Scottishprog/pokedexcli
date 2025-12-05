@@ -27,20 +27,18 @@ func startRepl(cfg *config) {
 			continue
 		}
 
-		// if no second word from input, append a blank string.
-		if len(userText) == 1 {
-			userText = append(userText, "")
-		}
-
 		command := userText[0]
-		variable := userText[1]
+		args := []string{}
+		if len(userText) > 1 {
+			args = userText[1:]
+		}
 		functionName, ok := getCommands()[command]
 		if !ok {
 			fmt.Printf("Unknown command: %s\n", command)
 		} else {
-			err := functionName.callback(cfg, &variable)
+			err := functionName.callback(cfg, args...)
 			if err != nil {
-				return
+				fmt.Printf("Error: %s\n", err)
 			}
 		}
 	}
@@ -55,7 +53,7 @@ func cleanInput(text string) []string {
 type cliCommand struct {
 	name        string
 	description string
-	callback    func(*config, *string) error
+	callback    func(*config, ...string) error
 }
 
 func getCommands() map[string]cliCommand {
