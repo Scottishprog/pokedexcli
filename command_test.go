@@ -33,3 +33,16 @@ func TestExplore(t *testing.T) {
 		fmt.Println("Error - commandExplore:", err)
 	}
 }
+
+func TestPokemonData(t *testing.T) {
+	pokeClient := pokeapi.NewClient(5*time.Second, time.Minute*5)
+	Config := &config{
+		pokeapiClient: pokeClient,
+	}
+	t.Run("Pokemon Data", func(t *testing.T) {
+		_, err := Config.pokeapiClient.PokemonData("pikachu")
+		if err != nil {
+			t.Errorf("cfg.pokeapiClient.PokemonData returned error: %v", err)
+		}
+	})
+}

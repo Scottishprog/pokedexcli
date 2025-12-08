@@ -16,7 +16,7 @@ func commandExplore(cfg *config, args ...string) error {
 		return err
 	}
 
-	fmt.Println("\n")
+	//fmt.Println("\n")
 	for _, pokemon := range deepmapdata.PokemonEncounters {
 		fmt.Println(pokemon.Pokemon.Name)
 	}
