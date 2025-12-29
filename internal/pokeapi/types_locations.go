@@ -63,7 +63,7 @@ type DeepMapData struct {
 	} `json:"pokemon_encounters"`
 }
 
-type pokemonData struct {
+type PokemonData struct {
 	Abilities []struct {
 		Ability struct {
 			Name string `json:"name"`
