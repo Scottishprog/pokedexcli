@@ -40,9 +40,9 @@ func TestPokemonData(t *testing.T) {
 		pokeapiClient: pokeClient,
 	}
 	t.Run("Pokemon Data", func(t *testing.T) {
-		_, err := Config.pokeapiClient.PokemonData("pikachu")
+		_, err := Config.pokeapiClient.Cetch_Pokemmon("pikachu")
 		if err != nil {
-			t.Errorf("cfg.pokeapiClient.PokemonData returned error: %v", err)
+			t.Errorf("cfg.pokeapiClient.CaughtPokemmon returned error: %v", err)
 		}
 	})
 }

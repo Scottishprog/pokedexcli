@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-func (c *Client) PokemonData(pokemon string) (PokemonData, error) {
+func (c *Client) Cetch_Pokemmon(pokemon string) (PokemonData, error) {
 	url := baseURL + "/pokemon/" + pokemon
 
 	//if cache hit, return data directly
@@ -43,5 +43,6 @@ func (c *Client) PokemonData(pokemon string) (PokemonData, error) {
 	}
 
 	c.cache.Add(url, dat)
+	
 	return pokemondata, nil
 }
